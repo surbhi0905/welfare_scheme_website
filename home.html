@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gramin Yojana | Rural Government Schemes India</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f0f4f8;
+    color: #1a1a1a;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  header {
+    background: #1a6b3c;
+    color: white;
+    padding: 20px 16px 16px;
+    text-align: center;
+  }
+  header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  header p {
+    font-size: 14px;
+    opacity: 0.88;
+  }
+
+  .search-wrap {
+    background: #fff;
+    padding: 14px 16px;
+    border-bottom: 2px solid #d4e8d8;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .search-wrap input {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 16px;
+    border: 2px solid #2e8b57;
+    border-radius: 8px;
+    outline: none;
+    background: #f9fef9;
+    color: #1a1a1a;
+  }
+  .search-wrap input:focus { border-color: #1a6b3c; background: #fff; }
+
+  .filter-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 12px 16px 4px;
+    background: #fff;
+    border-bottom: 1px solid #e0eee4;
+  }
+  .filter-btn {
+    padding: 6px 14px;
+    font-size: 13px;
+    border: 1.5px solid #2e8b57;
+    border-radius: 20px;
+    background: white;
+    color: #2e8b57;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  .filter-btn.active, .filter-btn:hover {
+    background: #2e8b57;
+    color: white;
+  }
+
+  .count-bar {
+    padding: 10px 16px;
+    font-size: 13px;
+    color: #555;
+    background: #f8fdf9;
+    border-bottom: 1px solid #e0eee4;
+  }
+
+  .schemes-list {
+    padding: 12px 12px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: white;
+    border-radius: 10px;
+    border: 1.5px solid #c8e6c9;
+    overflow: hidden;
+  }
+  .card.hidden { display: none; }
+
+  .card-header {
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid #e8f5e9;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .card-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .icon-green { background: #e8f5e9; }
+  .icon-blue { background: #e3f2fd; }
+  .icon-orange { background: #fff3e0; }
+  .icon-purple { background: #f3e5f5; }
+  .icon-teal { background: #e0f2f1; }
+  .icon-red { background: #fce4ec; }
+
+  .card-title-area h2 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a6b3c;
+    line-height: 1.3;
+    margin-bottom: 3px;
+  }
+  .card-title-area .subtitle {
+    font-size: 12px;
+    color: #888;
+  }
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+  .badge-green { background: #e8f5e9; color: #2e7d32; }
+  .badge-blue { background: #e3f2fd; color: #1565c0; }
+  .badge-orange { background: #fff3e0; color: #e65100; }
+  .badge-purple { background: #f3e5f5; color: #6a1b9a; }
+  .badge-teal { background: #e0f2f1; color: #00695c; }
+
+  .card-body { padding: 12px 16px 14px; }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    margin-top: 10px;
+  }
+  .section-label:first-child { margin-top: 0; }
+
+  .card-body p {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.55;
+    margin-bottom: 2px;
+  }
+
+  .eligibility-list {
+    padding-left: 0;
+    list-style: none;
+    margin: 2px 0;
+  }
+  .eligibility-list li {
+    font-size: 13px;
+    color: #444;
+    padding: 3px 0 3px 18px;
+    position: relative;
+    line-height: 1.45;
+  }
+  .eligibility-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #2e8b57;
+    font-weight: 700;
+    font-size: 12px;
+  }
+
+  .benefit-pill {
+    display: inline-block;
+    background: #f1f8e9;
+    border: 1px solid #aed581;
+    color: #33691e;
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 3px 4px 3px 0;
+  }
+
+  .apply-link {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 8px 18px;
+    background: #1a6b3c;
+    color: white;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .apply-link:hover { background: #145a32; }
+
+  .no-results {
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 15px;
+    color: #888;
+    display: none;
+  }
+
+  footer {
+    background: #1a6b3c;
+    color: rgba(255,255,255,0.85);
+    text-align: center;
+    padding: 16px;
+    font-size: 12px;
+  }
+
+  .tags { display: none; }
+
+  @media (max-width: 480px) {
+    header h1 { font-size: 18px; }
+    .card-title-area h2 { font-size: 14px; }
+    .card-body p { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🌾 Gramin Yojana — Rural Schemes India</h1>
+  <p>Sarkari Yojanayein | सरकारी ग्रामीण योजनाएं</p>
+</header>
+
+<div class="search-wrap">
+  <input type="text" id="searchBox" placeholder="🔍 Search: house, kisan, toilet, job, pension, mahila..." autocomplete="off" aria-label="Search schemes" />
+</div>
+
+<div class="filter-row" id="filterRow">
+  <button class="filter-btn active" data-cat="all">All Schemes</button>
+  <button class="filter-btn" data-cat="housing">Housing</button>
+  <button class="filter-btn" data-cat="employment">Employment</button>
+  <button class="filter-btn" data-cat="farming">Farming</button>
+  <button class="filter-btn" data-cat="health">Health</button>
+  <button class="filter-btn" data-cat="women">Women</button>
+  <button class="filter-btn" data-cat="sanitation">Sanitation</button>
+  <button class="filter-btn" data-cat="education">Education</button>
+  <button class="filter-btn" data-cat="pension">Pension</button>
+</div>
+
+<div class="count-bar" id="countBar">Showing all 20 schemes</div>
+
+<div class="schemes-list" id="schemesList">
+
+  <!-- SCHEME 1 -->
+  <div class="card" data-cat="housing" data-tags="house home ghar building construction makaan aawas awas pmay pradhan mantri awas yojana gramin housing bpl below poverty pakka home shelter bhawan">
+    <div class="card-header">
+      <div class="card-icon icon-green">🏠</div>
+      <div class="card-title-area">
+        <h2>Pradhan Mantri Awas Yojana – Gramin (PMAY-G)</h2>
+        <div class="subtitle">PM Housing Scheme – Rural</div>
+        <span class="badge badge-green">Housing</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="section-label">About</div>
+      <p>Provides financial assistance to homeless or kachcha-house families in rural India to build a pucca (permanent) house with basic amenities.</p>
+      <div class="section-label">Benefits</div>
+      <span class="benefit-pill">₹1.20 Lakh (Plains)</span>
+      <span class="benefit-pill">₹1.30 Lakh (Hills/NE)</span>
+      <span class="benefit-pill">90 days MGNREGA wages</span>
+      <div class="section-label">Eligibility</div>
+      <ul class="eligibility-list">
+        <li>Homeless or living in 0/1-room kachcha house</li>
+        <li>Listed in SECC 2011 data (Socio Economic Caste Census)</li>
+        <li>No pucca house in name of any family member</li>
+        <li>BPL (Below Poverty Line) family priority</li>
+        <li>SC/ST, minorities, freed bonded labourers get priority</li>
+      </ul>
+      <a class="apply-link" href="https://pmayg.nic.in" target="_blank">Apply / More Info →</a>
+    </div>
+    <div class="tags">house home ghar building construction makaan aawas awas pmay housing bpl pakka bhawan</div>
+  </div>
+
+  <!-- SCHEME 2 -->
+  <div class="card" data-cat="employment" data-tags="job kaam rozgar work mgnrega nrega mahatma gandhi employment guarantee manrega labour daily wage narega">
+    <div class="card-header">
+      <div class="card-icon icon-blue">👷</div>
+      <div class="card-title-area">
+        <h2>MGNREGS – Mahatma Gandhi National Rural Employment Guarantee</h2>
+        <div class="subtitle">100 Days Guaranteed Work</div>
+        <span class="badge badge-blue">Employment</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="section-label">About</div>
+      <p>Legal guarantee of 100 days of wage employment per year to every rural household whose adult members are willing to do unskilled manual work.</p>
+      <div class="section-label">Benefits</div>
+      <span class="benefit-pill">100 days/year guaranteed work</span>
+      <span class="benefit-pill">Daily wage ₹220–₹374 (state-wise)</span>
+      <span class="benefit-pill">Unemployment allowance if no work given</span>
+      <div class="section-label">Eligibility</div>
+      <ul class="eligibility-list">
+        <li>Any adult member of a rural household</li>
+        <li>Willing to do unskilled manual labour</li>
+        <li>Must register with the local Gram Panchayat</li>
+        <li>Work must be provided within 15 days of application</li>
+        <li>At least 1/3 beneficiaries must be women</li>
+      </ul>
+      <a class="apply-link" href="https://nrega.nic.in" target="_blank">Apply / More Info →</a>
+    </div>
+    <div class="tags">job kaam rozgar work mgnrega nrega labour daily wage narega</div>
+  </div>
+
+  <!-- SCHEME 3 -->
+  <div class="card" data-cat="farming" data-tags="kisan kisaan farmer farming agriculture annadata pm kisan samman nidhi crop income support kheti fasal">
+    <div class="card-header">
+      <div class="card-icon icon-green">🌾</div>
+      <div class="card-title-area">
+        <h2>PM-KISAN – Pradhan Mantri Kisan Samman Nidhi</h2>
+        <div class="subtitle">Direct Income Support to Farmers</div>
+        <span class="badge badge-green">Farming</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="section-label">About</div>
+      <p>Provides direct income support of ₹6,000 per year to small and marginal farmer families, paid in three equal instalments of ₹2,000 directly into their bank accounts.</p>
+      <div class="section-label">Benefits</div>
+      <span class="benefit-pill">₹6,000/year (₹2,000 × 3 instalments)</span>
+      <span class="benefit-pill">Direct Bank Transfer (DBT)</span>
+      <div class="section-label">Eligibility</div>
+      <ul class="eligibility-list">
+        <li>Small and marginal farmers (land up to 2 hectares)</li>
+        <li>Name must be in land records as farmer</li>
+        <li>Must have Aadhaar-linked bank account</li>
+        <li>Excluded: income tax payers, institutional land holders, govt employees (except Class IV)</li>
+        <li>Retired pensioners earning above ₹10,000/month ineligible</li>
+      </ul>
+      <a class="apply-link" href="https://pmkisan.gov.in" target="_blank">Apply / More Info →</a>
+    </div>
+    <div class="tags">kisan farmer farming agriculture pm kisan income support kheti</div>
+  </div>
+
+  <!-- SCHEME 4 -->
+  <div class="card" data-cat="health" data-tags="health sehat bimari hospital insurance ayushman bharat treatment free doctor medicine pmjay jan arogya">
+    <div class="card-header">
+      <div class="card-icon icon-orange">🏥</div>
+      <div class="card-title-area">
+        <h2>Ayushman Bharat – PM Jan Arogya Yojana (PMJAY)</h2>
+        <div class="subtitle">₹5 Lakh Free Health Insurance</div>
+        <span class="badge badge-orange">Health</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="section-label">About</div>
+      <p>World's largest health insurance scheme providing free hospitalisation coverage of ₹5 lakh per family per year for secondary and tertiary care at empanelled public and private hospitals.</p>
+      <div class="section-label">Benefits</div>
+      <span class="benefit-pill">₹5 Lakh/year insurance</span>
+      <span class="benefit-pill">1500+ treatments covered</span>
+      <span class="benefit-pill">Cashless treatment at 25,000+ hospitals</span>
+      <div class="section-label">Eligibility</div>
+      <ul class="eligibility-list">
+        <li>Rural: families with kachcha walls/roof, no adult member, female-headed households</li>
+        <li>Manual scavenging families, primitive tribal groups, bonded labourers</li>
+        <li>Based on SECC 2011 database — check name at official portal</li>
+        <li>No cap on family size or age</li>
+      </ul>
+      <a class="apply-link" href="https://pmjay.gov.in" target="_blank">Apply / More Info →</a>
+    </div>
+    <div class="tags">health sehat bimari hospital insurance ayushman treatment free doctor medicine</div>
+  </div>
+
+  <!-- SCHEME 5 -->
+  <div class="card" data-cat="sanitation" data-tags="toilet sauchalay swachh bathroom latrine sanitation hygiene clean india mission swachh bharat open defecation free odf">
+    <div class="card-header">
+      <div class="card-icon icon-teal">🚽</div>
+      <div class="card-title-area">
+        <h2>Swachh Bharat Mission – Gramin (SBM-G)</h2>
+        <div class="subtitle">Free Household Toilet Construction</div>
+        <span class="badge badge-teal">Sanitation</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="section-label">About</div>
+      <p>Provides financial assistance for construction of individual household latrines (IHHL) to eliminate open defecation and improve sanitation in rural areas.</p>
+      <div class="section-label">Benefits</div>
+      <span class="benefit-pill">₹12,000 per household</span>
+      <span class="benefit-pill">Linked with MGNREGS for labour</span>
+      <div class="section-label">Eligibility</div>
+      <ul class="eligibility-list">
+        <li>Rural households with no toilet / incomplete toilet</li>
+        <li>BPL families and APL families in special categories</li>
+        <li>SC/ST, small/marginal farmers, landless labourers with homestead</li>
+        <li>Physically handicapped persons and women-headed households</li>
+        <li>Apply through Gram Panchayat</li>
+      </ul>
+      <a class="apply-link" href="https://sbm.gov.in" target="_blank">Apply / More Info →</a>
+    </div>
+    <div class="tags">toilet sauchalay swachh bathroom latrine sanitation hygiene clean india open defecation odf</div>
+  </div>
+
+  <!-- SCHEME 6 -->
+  <div class="card" data-cat="farming" data-tags="crop fasal insurance bima kisan pm fasal bima yojana natural disaster flood drought fire weather">
+    <div class="card-header">
+      <div class="card-icon icon-green">🌧️</div>
+      <div class="card-title-area">
+        <h2>Pradhan Mantri Fasal Bima Yojana (PMFBY)</h2>
+        <div class="subtitle">Crop Insurance for Farmers</div>
+        <span class="badge badge-green">Farming</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="section-label">About</div>
+      <p>Provides financial support to farmers suffering crop loss/damage due to unforeseen events like floods, drought, pests, diseases or natural calamities.</p>
+      <div class="section-label">Benefits</div>
+      <span class="benefit-pill">Only 2% premium (Kharif)</span>
+      <span class="benefit-pill">1.5% premium (Rabi)</span>
+      <span class="benefit-pill">Full sum insured for loss</span>
+      <div class="section-label">Eligibility</div>
+      <ul class="eligibility-list">
+        <li>All farmers growing notified crops in notified areas</li>
+        <li>Compulsory for loanee farmers (crop loan from banks)</li>
+        <li>Voluntary for non-loanee farmers</li>
+        <li>Sharecroppers and tenant farmers also eligible</li>
+        <li>Must enroll before crop season cutoff date</li>
+      </ul>
+      <a class="apply-link" href="https://pmfby.gov.in" target="_blank">Apply / More Info →</a>
+    </div>
+    <div class="tags">crop fasal insurance bima kisan natural disaster flood drought fire weather</div>
+  </div>
+
+  <!-- SCHEME 7 -->
+  <div class="card" data-cat="women" data-tags="women mahila ladki girl ujjwala gas cylinder lpg kitchen cooking fuel stove dhuan dhuan-mukt">
+    <div class="card-header">
+      <div class="card-icon icon-orange">🍳</div>
+      <div class="card-title-area">
+        <h2>Pradhan Mantri Ujjwala Yojana (PMUY)</h2>
+        <div class="subtitle">Free LPG Gas Connection for Women</div>
+        <span class="badge badge-orange">Women</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="section-label">About</div>
+      <p>Provides free LPG gas connections to women from BPL households to move away from traditional chulha/wood fire cooking and reduce indoor air pollution.</p>
+      <div class="section-label">Benefits</div>
+      <span class="benefit-pill">Free gas connection</span>
+      <span class="benefit-pill">First refill free</span>
+      <span class="benefit-pill">EMI option for stove & regulator</span>
+      <div class="section-label">Eligibility</div>
+      <ul class="eligibility-list">
+        <li>Adult woman from BPL household (SECC 2011)</li>
+        <li>Must not already have LPG connection in the household</li>
+        <li>SC/ST, PMAY beneficiaries, forest dwellers, tea garden workers, river island dwellers eligible</li>
+        <li>Name in BPL ration card (Antyodaya Anna Yojana)</li>
+        <li>Apply at nearest LPG distributor with Aadhaar & BPL card</li>
+      </ul>
+      <a class="apply-link" href="https://pmuy.gov.in" target="_blank">Apply / More Info →</a>
+    </div>
+    <div class="tags">women mahila ladki girl ujjwala gas cylinder lpg kitchen cooking fuel stove</div>
+  </div>
+
+  <!-- SCHEME 8 -->
+  <div class="card" data-cat="education" data-tags="education padhai school midday meal khana bhojan student child bal poshan nutrition anganwadi">
+    <div class="card-header">
+      <div class="card-icon icon-blue">📚</div>
+      <div class="card-title-area">
+        <h2>PM Poshan Shakti Nirman (Mid-Day Meal Scheme)</h2>
+        <div class="subtitle">Free School Meals for Children</div>
+        <span class="badge badge-blue">Education</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="section-label">About</div>
+      <p>Provides free cooked meals to school children (Class 1–8) in government schools to improve nutrition, reduce hunger, and increase school attendance in rural areas.</p>
+      <div class="section-label">Benefits</div>
+      <span class="benefit-pill">Free hot meal every school day</span>
+      <span class="benefit-pill">450 kcal + 12g protein (primary)</span>
+      <span class="benefit-pill">700 kcal + 20g protein (upper primary)</span>
+      <div class="section-label">Eligibility</div>
+      <ul class="eligibility-list">
+        <li>All children enrolled in Class 1 to 8</li>
+        <li>Government schools, government-aided schools</li>
+        <li>Madrasa and Maktab schools supported by state governments</li>
+        <li>No specific income criteria — all children covered</li>
+      </ul>
+      <a class="apply-link" href="https://pmposhan.education.gov.in" target="_blank">More Info →</a>
+    </div>
+    <div class="tags">education padhai school midday meal khana bhojan student child nutrition</div>
+  </div>
+
+  <!-- SCHEME 9 -->
+  <div class="card" data-cat="pension" data-tags="pension buzurg old age vridha widow divyang disability insured unorganised worker pm shram yogi maandhan">
+    <div class="card-header">
+      <div class="card-icon icon-purple">👴</div>
+      <div class="card-title-area">
+        <h2>PM Shram Yogi Maan-dhan (PM-SYM)</h2>
+        <div class="subtitle">Pension for Unorganised Workers</div>
+        <span class="badge badge-purple">Pension</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="section-label">About</div>
+      <p>Voluntary pension scheme for unorganised sector workers (farm labourers, construction workers, rickshaw pullers, street vendors) ensuring ₹3,000/month pension after age 60.</p>
+      <div class="section-label">Benefits</div>
+      <span class="benefit-pill">₹3,000/month pension after 60</span>
+      <span class="benefit-pill">Govt matches your contribution</span>
+      <span class="benefit-pill">Family pension on death</span>
+      <div class="section-label">Eligibility</div>
+      <ul class="eligibility-list">
+        <li>Age between 18–40 years</li>
+        <li>Monthly income ₹15,000 or less</li>
+        <li>Not covered under EPFO / ESIC / NPS (Govt)</li>
+        <li>Not an income tax payer</li>
+        <li>Aadhaar card and savings bank account required</li>
+      </ul>
+      <a class="apply-link" href="https://maandhan.in" target="_blank">Apply / More Info →</a>
+    </div>
+    <div class="tags">pension buzurg old age widow disability unorganised worker shram yogi</div>
+  </div>
+
+  <!-- SCHEME 10 -->
+  <div class="card" data-cat="women" data-tags="women mahila beti betiya ladki girl beti bachao padhao education female child sex ratio birth">
+    <div class="card-header">
+      <div class="card-icon icon-purple">👧</div>
+      <div class="card-title-area">
+        <h2>Beti Bachao Beti Padhao (BBBP)</h2>
+        <div class="subtitle">Girl Child Education & Welfare</div>
+        <span class="badge badge-purple">Women</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="section-label">About</div>
+      <p>Scheme to address gender-biased sex selection, ensure survival and protection of the girl child, and promote education of girls. Combined with Sukanya Samriddhi Yojana for savings.</p>
+      <div class="section-label">Benefits</div>
+      <span class="benefit-pill">Free education support</span>
+      <span class="benefit-pill">Sukanya Samriddhi savings account</span>
+      <span class="benefit-pill">7.6% interest on savings</span>
+      <div class="section-label">Eligibility</div>
+      <ul class="eligibility-list">
+        <li>Girl child from birth to age 10 (Sukanya Samriddhi)</li>
+        <li>Account can be opened by parents/guardians</li>
+        <li>Minimum deposit ₹250/year, max ₹1.5 lakh/year</li>
+        <li>Open at any post office or authorised bank</li>
+        <li>Matures when girl turns 21</li>
+      </ul>
+      <a class="apply-link" href="https://wcd.nic.in/bbbp-schemes" target="_blank">More Info →</a>
+    </div>
+    <div class="tags">women mahila beti betiya ladki girl education female child sex ratio</div>
+  </div>
+
+  <!-- SCHEME 11 -->
+  <div class="card" data-cat="health" data-tags="maternity pregnancy garbhwati pregnant mother janani suraksha bachcha baby delivery hospital birth delivery">
+    <div class="card-header">
+      <div class="card-icon icon-orange">🤱</div>
+      <div class="card-title-area">
+        <h2>Janani Suraksha Yojana (JSY)</h2>
+        <div class="subtitle">Safe Motherhood & Cash for Delivery</div>
+        <span class="badge badge-orange">Health</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="section-label">About</div>
+      <p>Promotes institutional delivery among poor pregnant women by providing cash assistance to both the mother and the ASHA worker to reduce maternal and neonatal mortality.</p>
+      <div class="section-label">Benefits</div>
+      <span class="benefit-pill">₹1,400 cash (rural delivery)</span>
+      <span class="benefit-pill">₹600 cash (urban delivery)</span>
+      <span class="benefit-pill">₹600 to ASHA worker</span>
+      <div class="section-label">Eligibility</div>
+      <ul class="eligibility-list">
+        <li>Pregnant women from BPL families, SC/ST</li>
+        <li>Age 19 years or above</li>
+        <li>Delivery in government health centre or accredited private hospital</li>
+        <li>Up to 2 live births covered</li>
+        <li>Valid in all states; higher rates in LPS (low performing) states</li>
+      </ul>
+      <a class="apply-link" href="https://nhm.gov.in/index1.php?lang=1&level=3&sublinkid=841&lid=309" target="_blank">More Info →</a>
+    </div>
+    <div class="tags">maternity pregnancy garbhwati pregnant mother delivery baby birth hospital</div>
+  </div>
+
+  <!-- SCHEME 12 -->
+  <div class="card" data-cat="education" data-tags="scholarship padhai education higher studies sc st obc minority students college stipend post matric">
+    <div class="card-header">
+      <div class="card-icon icon-blue">🎓</div>
+      <div class="card-title-area">
+        <h2>National Scholarship Portal (NSP) Schemes</h2>
+        <div class="subtitle">Scholarships for SC / ST / OBC / Minority</div>
+        <span class="badge badge-blue">Education</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="section-label">About</div>
+      <p>Single platform for multiple central and state scholarships for students from SC, ST, OBC, minorities and economically weaker sections — from Class 1 to post-graduation.</p>
+      <div class="section-label">Benefits</div>
+      <span class="benefit-pill">₹500–₹20,000 per year</span>
+      <span class="benefit-pill">Covers tuition & maintenance</span>
+      <span class="benefit-pill">Direct bank transfer</span>
+      <div class="section-label">Eligibility</div>
+      <ul class="eligibility-list">
+        <li>Students from SC/ST/OBC/Minority communities</li>
+        <li>Family income generally below ₹2–2.5 lakh per annum</li>
+        <li>Enrolled in recognised school/college</li>
+        <li>Minimum 50% marks in previous exam (varies by scheme)</li>
+        <li>Aadhaar-linked bank account required</li>
+      </ul>
+      <a class="apply-link" href="https://scholarships.gov.in" target="_blank">Apply on NSP →</a>
+    </div>
+    <div class="tags">scholarship padhai education higher studies sc st obc minority students college stipend</div>
+  </div>
+
+  <!-- SCHEME 13 -->
+  <div class="card" data-cat="farming" data-tags="soil soil health card mrida parikshan khet land nutrient fertilizer kisan kheti">
+    <div class="card-header">
+      <div class="card-icon icon-green">🌱</div>
+      <div class="card-title-area">
+        <h2>Soil Health Card Scheme (SHC)</h2>
+        <div class="subtitle">Free Soil Testing for Farmers</div>
+        <span class="badge badge-green">Farming</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="section-label">About</div>
+      <p>Provides farmers with a soil health card every 2 years containing soil nutrient status and recommended dosage of fertilizers for better yield at lower cost.</p>
+      <div class="section-label">Benefits</div>
+      <span class="benefit-pill">Free soil testing</span>
+      <span class="benefit-pill">Personalised fertilizer advice</span>
+      <span class="benefit-pill">12 nutrient parameters tested</span>
+      <div class="section-label">Eligibility</div>
+      <ul class="eligibility-list">
+        <li>Any farmer with agricultural land</li>
+        <li>Apply at nearest Krishi Vigyan Kendra or Agriculture office</li>
+        <li>No income restriction — all farmers eligible</li>
+        <li>Soil samples collected every 2 years</li>
+      </ul>
+      <a class="apply-link" href="https://soilhealth.dac.gov.in" target="_blank">More Info →</a>
+    </div>
+    <div class="tags">soil health card mrida parikshan khet land nutrient fertilizer kisan kheti</div>
+  </div>
+
+  <!-- SCHEME 14 -->
+  <div class="card" data-cat="employment" data-tags="self employment vyapar business mudra loan microfinance shishu kishore tarun bank credit small business udyam">
+    <div class="card-header">
+      <div class="card-icon icon-blue">💼</div>
+      <div class="card-title-area">
+        <h2>PM MUDRA Yojana (PMMY)</h2>
+        <div class="subtitle">Loans for Small Business & Self-Employment</div>
+        <span class="badge badge-blue">Employment</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="section-label">About</div>
+      <p>Provides collateral-free loans to small and micro enterprises — including rural artisans, small shopkeepers, and farmers doing allied activities — through banks and MFIs.</p>
+      <div class="section-label">Benefits</div>
+      <span class="benefit-pill">Shishu: up to ₹50,000</span>
+      <span class="benefit-pill">Kishore: ₹50,000–₹5 Lakh</span>
+      <span class="benefit-pill">Tarun: ₹5 Lakh–₹10 Lakh</span>
+      <div class="section-label">Eligibility</div>
+      <ul class="eligibility-list">
+        <li>Non-farm income generating micro/small business</li>
+        <li>Individuals, proprietary firms, partnership firms</li>
+        <li>No collateral required for Shishu and Kishore loans</li>
+        <li>Apply at any scheduled commercial bank, NBFC, or MFI</li>
+        <li>No minimum income criterion; bank assesses repayment capacity</li>
+      </ul>
+      <a class="apply-link" href="https://mudra.org.in" target="_blank">Apply / More Info →</a>
+    </div>
+    <div class="tags">self employment vyapar business mudra loan microfinance bank credit small business</div>
+  </div>
+
+  <!-- SCHEME 15 -->
+  <div class="card" data-cat="sanitation" data-tags="paani pani water jal jeevan mission drinking clean water tap pipeline piped har ghar jal supply rural">
+    <div class="card-header">
+      <div class="card-icon icon-teal">💧</div>
+      <div class="card-title-area">
+        <h2>Jal Jeevan Mission (JJM)</h2>
+        <div class="subtitle">Tap Water to Every Rural Home</div>
+        <span class="badge badge-teal">Sanitation</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="section-label">About</div>
+      <p>Aims to provide safe and adequate drinking water through individual household tap connections (55 litres/person/day) to every rural household in India by 2024.</p>
+      <div class="section-label">Benefits</div>
+      <span class="benefit-pill">Tap water connection at home</span>
+      <span class="benefit-pill">55 L/person/day clean water</span>
+      <span class="benefit-pill">Free to BPL households</span>
+      <div class="section-label">Eligibility</div>
+      <ul class="eligibility-list">
+        <li>All rural households without piped water connection</li>
+        <li>SC/ST hamlets, habitations near water quality affected areas prioritised</li>
+        <li>Drought-prone and desert areas given special focus</li>
+        <li>Apply through Gram Panchayat / Pani Samiti</li>
+      </ul>
+      <a class="apply-link" href="https://jaljeevanmission.gov.in" target="_blank">More Info →</a>
+    </div>
+    <div class="tags">paani pani water jal jeevan drinking clean tap pipeline har ghar jal supply rural</div>
+  </div>
+
+  <!-- SCHEME 16 -->
+  <div class="card" data-cat="pension" data-tags="widow vidhwa vridha pension old age buzurg disability divyang handicap national social assistance nsap">
+    <div class="card-header">
+      <div class="card-icon icon-purple">🤝</div>
+      <div class="card-title-area">
+        <h2>National Social Assistance Programme (NSAP)</h2>
+        <div class="subtitle">Pension for Elderly, Widows & Disabled</div>
+        <span class="badge badge-purple">Pension</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="section-label">About</div>
+      <p>Umbrella scheme providing monthly pensions to old-age persons, widows, and disabled persons belonging to BPL households across rural and urban India.</p>
+      <div class="section-label">Benefits</div>
+      <span class="benefit-pill">₹200–₹500/month (central share)</span>
+      <span class="benefit-pill">State adds additional top-up</span>
+      <span class="benefit-pill">Lump-sum for family on BPL death</span>
+      <div class="section-label">Eligibility</div>
+      <ul class="eligibility-list">
+        <li>Indira Gandhi Old Age Pension (IGNOAP): Age 60+, BPL household</li>
+        <li>Indira Gandhi Widow Pension (IGNWPS): Widow aged 40–79, BPL</li>
+        <li>Indira Gandhi Disability Pension (IGNDPS): 80% or more disability, 18+ years, BPL</li>
+        <li>National Family Benefit Scheme: Death of primary breadwinner (18–59) in BPL family</li>
+        <li>Apply at Block Development Office / Gram Panchayat</li>
+      </ul>
+      <a class="apply-link" href="https://nsap.nic.in" target="_blank">More Info →</a>
+    </div>
+    <div class="tags">widow vidhwa vridha pension old age buzurg disability divyang handicap nsap</div>
+  </div>
+
+  <!-- SCHEME 17 -->
+  <div class="card" data-cat="farming" data-tags="kisan irrigation sinchai water pump drip sprinkler per drop more crop water efficiency agriculture pradhan mantri krishi">
+    <div class="card-header">
+      <div class="card-icon icon-teal">🚿</div>
+      <div class="card-title-area">
+        <h2>Pradhan Mantri Krishi Sinchayee Yojana (PMKSY)</h2>
+        <div class="subtitle">Irrigation & Water Efficiency for Farms</div>
+        <span class="badge badge-teal">Farming</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="section-label">About</div>
+      <p>Expands irrigation coverage and improves water use efficiency through drip/sprinkler systems with subsidy support — promoting "Har Khet Ko Pani, More Crop Per Drop".</p>
+      <div class="section-label">Benefits</div>
+      <span class="benefit-pill">45–55% subsidy on drip/sprinkler</span>
+      <span class="benefit-pill">Higher subsidy for SC/ST/small farmers</span>
+      <span class="benefit-pill">Watershed development support</span>
+      <div class="section-label">Eligibility</div>
+      <ul class="eligibility-list">
+        <li>All farmers with agricultural land (own or leased)</li>
+        <li>Small and marginal farmers get higher subsidy</li>
+        <li>SC/ST farmers: up to 55% subsidy on micro-irrigation</li>
+        <li>Apply at District Agriculture Office</li>
+        <li>Water source (well/canal/river) required on or near farm</li>
+      </ul>
+      <a class="apply-link" href="https://pmksy.gov.in" target="_blank">More Info →</a>
+    </div>
+    <div class="tags">kisan irrigation sinchai water pump drip sprinkler per drop more crop pradhan mantri krishi</div>
+  </div>
+
+  <!-- SCHEME 18 -->
+  <div class="card" data-cat="health" data-tags="ration anaj food grain rice wheat subsidy public distribution system pds rashan card cheap food nutrition">
+    <div class="card-header">
+      <div class="card-icon icon-orange">🌾</div>
+      <div class="card-title-area">
+        <h2>PM Garib Kalyan Anna Yojana (PMGKAY)</h2>
+        <div class="subtitle">Free Ration / Subsidised Food Grains</div>
+        <span class="badge badge-orange">Health</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="section-label">About</div>
+      <p>Provides free food grains (rice/wheat) to beneficiaries under the National Food Security Act — 5 kg per person per month — distributed through the Public Distribution System (PDS) ration shops.</p>
+      <div class="section-label">Benefits</div>
+      <span class="benefit-pill">5 kg grain/person/month free</span>
+      <span class="benefit-pill">35 kg/month for Antyodaya families</span>
+      <span class="benefit-pill">Rice, wheat, coarse grains</span>
+      <div class="section-label">Eligibility</div>
+      <ul class="eligibility-list">
+        <li>Priority Households (PHH): All NFSA ration card holders</li>
+        <li>Antyodaya Anna Yojana (AAY): Poorest of the poor families</li>
+        <li>Up to 75% rural population covered under NFSA</li>
+        <li>Must have valid ration card linked with Aadhaar</li>
+        <li>Collect from Fair Price Shop (Ration ki dukan) monthly</li>
+      </ul>
+      <a class="apply-link" href="https://dfpd.gov.in" target="_blank">More Info →</a>
+    </div>
+    <div class="tags">ration anaj food grain rice wheat subsidy pds rashan card cheap food nutrition</div>
+  </div>
+
+  <!-- SCHEME 19 -->
+  <div class="card" data-cat="employment" data-tags="skill training kaushal vikas youth yuva rojgar certificate course diploma pm kaushal vikas yojana pmkvy">
+    <div class="card-header">
+      <div class="card-icon icon-blue">🔧</div>
+      <div class="card-title-area">
+        <h2>PM Kaushal Vikas Yojana (PMKVY)</h2>
+        <div class="subtitle">Free Skill Training for Youth</div>
+        <span class="badge badge-blue">Employment</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="section-label">About</div>
+      <p>Provides free short-term skill training and certification in over 40 sectors (construction, agriculture, healthcare, IT, beauty, etc.) to help rural youth get employment or self-employment.</p>
+      <div class="section-label">Benefits</div>
+      <span class="benefit-pill">Free skill training (3–6 months)</span>
+      <span class="benefit-pill">Government-recognised certificate</span>
+      <span class="benefit-pill">Placement assistance</span>
+      <span class="benefit-pill">₹500 reward on certification</span>
+      <div class="section-label">Eligibility</div>
+      <ul class="eligibility-list">
+        <li>Indian citizens aged 15–45 years</li>
+        <li>Class 10 dropouts and above preferred</li>
+        <li>Unemployed and school/college dropouts eligible</li>
+        <li>No income limit; open to all</li>
+        <li>Register at nearest Skill India Centre or online</li>
+      </ul>
+      <a class="apply-link" href="https://pmkvyofficial.org" target="_blank">Apply / More Info →</a>
+    </div>
+    <div class="tags">skill training kaushal vikas youth yuva rozgar certificate course pmkvy</div>
+  </div>
+
+  <!-- SCHEME 20 -->
+  <div class="card" data-cat="women" data-tags="women mahila self help group shg swayam sahayata samooh microfinance nrlm deen dayal antyodaya livelihood">
+    <div class="card-header">
+      <div class="card-icon icon-purple">👩‍👩‍👧</div>
+      <div class="card-title-area">
+        <h2>Deen Dayal Antyodaya Yojana – NRLM (DAY-NRLM)</h2>
+        <div class="subtitle">Women Self Help Groups & Livelihood</div>
+        <span class="badge badge-purple">Women</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="section-label">About</div>
+      <p>Promotes formation of women's Self Help Groups (SHGs) in rural areas, provides skill training, credit linkage with banks, and support for livelihoods to bring rural poor households out of poverty.</p>
+      <div class="section-label">Benefits</div>
+      <span class="benefit-pill">₹10,000–₹15,000 revolving fund</span>
+      <span class="benefit-pill">Bank loan linkage (₹1 lakh+)</span>
+      <span class="benefit-pill">Skill & livelihood training</span>
+      <span class="benefit-pill">Interest subvention (7% effective rate)</span>
+      <div class="section-label">Eligibility</div>
+      <ul class="eligibility-list">
+        <li>Rural women from poor households (SECC/BPL)</li>
+        <li>Group of 10–15 women form an SHG</li>
+        <li>Regular savings and meetings required</li>
+        <li>Priority: SC/ST women, disabled women, minorities</li>
+        <li>Contact Block Mission Management Unit or Gram Panchayat</li>
+      </ul>
+      <a class="apply-link" href="https://aajeevika.gov.in" target="_blank">More Info →</a>
+    </div>
+    <div class="tags">women mahila self help group shg swayam sahayata samooh nrlm deen dayal livelihood</div>
+  </div>
+
+</div>
+
+<div class="no-results" id="noResults">
+  <p style="font-size:32px; margin-bottom:12px;">🔍</p>
+  <p>No schemes found for "<span id="searchedWord"></span>"</p>
+  <p style="font-size:13px; color:#aaa; margin-top:8px;">Try words like: house, toilet, kisan, pension, mahila, job, ration</p>
+</div>
+
+<footer>
+  <p>Data sourced from Government of India official portals &nbsp;|&nbsp; For updates, visit india.gov.in</p>
+  <p style="margin-top:4px;">Always verify details at the official website before applying.</p>
+</footer>
+
+<script>
+  const cards = Array.from(document.querySelectorAll('.card'));
+  const searchBox = document.getElementById('searchBox');
+  const noResults = document.getElementById('noResults');
+  const countBar = document.getElementById('countBar');
+  const searchedWord = document.getElementById('searchedWord');
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  let activeCategory = 'all';
+
+  function normalize(str) {
+    return str.toLowerCase().replace(/[^\w\s]/g, ' ');
+  }
+
+  function filterCards() {
+    const query = normalize(searchBox.value.trim());
+    let visible = 0;
+
+    cards.forEach(card => {
+      const cat = card.getAttribute('data-cat');
+      const tags = normalize(card.getAttribute('data-tags') || '');
+      const text = normalize(card.innerText);
+      const combined = tags + ' ' + text;
+
+      const catMatch = (activeCategory === 'all' || cat === activeCategory);
+      const queryMatch = !query || combined.includes(query);
+
+      if (catMatch && queryMatch) {
+        card.classList.remove('hidden');
+        visible++;
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+
+    if (visible === 0) {
+      noResults.style.display = 'block';
+      searchedWord.textContent = searchBox.value;
+      countBar.textContent = 'No schemes found';
+    } else {
+      noResults.style.display = 'none';
+      const catLabel = activeCategory === 'all' ? 'all categories' : activeCategory;
+      countBar.textContent = `Showing ${visible} scheme${visible !== 1 ? 's' : ''} (${catLabel})`;
+    }
+  }
+
+  searchBox.addEventListener('input', filterCards);
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeCategory = btn.getAttribute('data-cat');
+      filterCards();
+    });
+  });
+
+  filterCards();
+</script>
+</body>
+</html>
